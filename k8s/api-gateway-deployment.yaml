@@ -3,9 +3,12 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
+    tags.datadoghq.com/env: sandbox
+    tags.datadoghq.com/service: api-gateway-service
+    tags.datadoghq.com/version: 1.0.1  
     app: api-gateway
   name: api-gateway
-  namespace: spring-petclinic
+  namespace: spring-petclinic-dd
 spec:
   replicas: 1
   selector:
@@ -15,10 +18,13 @@ spec:
   template:
     metadata:
       labels:
+        tags.datadoghq.com/env: sandbox
+        tags.datadoghq.com/service: api-gateway-service
+        tags.datadoghq.com/version: 1.0.1
         app: api-gateway
     spec:
-      containers:
-      - image: ${REPOSITORY_PREFIX}/api-gateway:latest
+      containers:   
+      - image: ${REPOSITORY_PREFIX}/api-gateway${IMAGE_SUFFIX}:latest
         name: api-gateway
         imagePullPolicy: Always
         livenessProbe:
@@ -43,6 +49,31 @@ spec:
             cpu: 500m
             memory: 1Gi
         env:
+        - name: JAVA_OPTS
+          value: "-javaagent:/workspace/BOOT-INF/lib/dd-java-agent-0.70.0.jar"
+        - name: DD_AGENT_HOST
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP        
+        - name: DD_ENV
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['tags.datadoghq.com/env']
+        - name: DD_SERVICE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['tags.datadoghq.com/service']
+        - name: DD_VERSION
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['tags.datadoghq.com/version']
+        - name: DD_PROFILING_ENABLED
+          value: "true"
+        - name: DD_LOGS_INJECTION
+          value: "true"
+        - name: DD_TRACE_SAMPLE_RATE
+          value: "1"
+
         - name: SPRING_PROFILES_ACTIVE
           value: kubernetes
         - name: MANAGEMENT_METRICS_EXPORT_WAVEFRONT_URI

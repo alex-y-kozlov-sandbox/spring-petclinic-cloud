@@ -18,7 +18,7 @@
     <properties>
         <spring-boot-admin.version>2.2.2</spring-boot-admin.version>
         <spring-cloud.version>Hoxton.SR6</spring-cloud.version>
-        <spring-boot.build-image.imageName>${REPOSITORY_PREFIX}/admin-server</spring-boot.build-image.imageName>
+        <spring-boot.build-image.imageName>${REPOSITORY_PREFIX}/admin-server${IMAGE_SUFFIX}</spring-boot.build-image.imageName>
 
     </properties>
 

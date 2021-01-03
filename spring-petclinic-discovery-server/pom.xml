@@ -16,7 +16,7 @@
     </parent>
 
     <properties>
-        <spring-boot.build-image.imageName>${REPOSITORY_PREFIX}/discovery-service</spring-boot.build-image.imageName>
+        <spring-boot.build-image.imageName>${REPOSITORY_PREFIX}/discovery-service${IMAGE_SUFFIX}</spring-boot.build-image.imageName>
         <spring-cloud.version>Hoxton.SR6</spring-cloud.version>
     </properties>
 

@@ -2,11 +2,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
   labels:
+    tags.datadoghq.com/env: sandbox
+    tags.datadoghq.com/service: customers-service
+    tags.datadoghq.com/version: 1.0.1  
     app: customers-service
   name: customers-service
-  namespace: spring-petclinic
+  namespace: spring-petclinic-dd
 spec:
   replicas: 1
   selector:
@@ -16,10 +18,13 @@ spec:
   template:
     metadata:
       labels:
+        tags.datadoghq.com/env: sandbox
+        tags.datadoghq.com/service: customers-service
+        tags.datadoghq.com/version: 1.0.1
         app: customers-service
     spec:
       containers:
-      - image: ${REPOSITORY_PREFIX}/customers-service:latest
+      - image: ${REPOSITORY_PREFIX}/customers-service${IMAGE_SUFFIX}:latest
         name: customers-service
         imagePullPolicy: Always
         livenessProbe:
@@ -44,10 +49,35 @@ spec:
             cpu: 2000m
             memory: 1Gi
         env:
+        - name: JAVA_OPTS
+          value: "-javaagent:/workspace/BOOT-INF/lib/dd-java-agent-0.70.0.jar"
+        - name: DD_AGENT_HOST
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP        
+        - name: DD_ENV
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['tags.datadoghq.com/env']
+        - name: DD_SERVICE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['tags.datadoghq.com/service']
+        - name: DD_VERSION
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['tags.datadoghq.com/version']
+        - name: DD_PROFILING_ENABLED
+          value: "true"
+        - name: DD_LOGS_INJECTION
+          value: "true"
+        - name: DD_TRACE_SAMPLE_RATE
+          value: "1"
+
         - name: SPRING_PROFILES_ACTIVE
           value: kubernetes
         - name: SPRING_DATASOURCE_URL
-          value: jdbc:mysql://customers-db-mysql.spring-petclinic.svc.cluster.local:3306/service_instance_db?queryInterceptors=brave.mysql8.TracingQueryInterceptor&exceptionInterceptors=brave.mysql8.TracingExceptionInterceptor&zipkinServiceName=customers-db
+          value: jdbc:mysql://customers-db-mysql.spring-petclinic.svc.cluster.local:3306/service_instance_db
         - name: SPRING_DATASOURCE_USERNAME
           value: root
         - name: SPRING_DATASOURCE_PASSWORD
@@ -59,6 +89,5 @@ spec:
           value: proxy://wavefront-proxy.spring-petclinic.svc.cluster.local:2878
         ports:
         - containerPort: 8080
-        resources: {}
       restartPolicy: Always
 status: {}

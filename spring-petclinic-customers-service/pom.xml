@@ -26,7 +26,7 @@
 		<wavefront.version>2.0.1-SNAPSHOT</wavefront.version>
 
 		<maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
-		<spring-boot.build-image.imageName>${REPOSITORY_PREFIX}/customers-service</spring-boot.build-image.imageName>
+		<spring-boot.build-image.imageName>${REPOSITORY_PREFIX}/customers-service${IMAGE_SUFFIX}</spring-boot.build-image.imageName>
 	</properties>
 
 	<dependencies>
@@ -36,10 +36,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
+<!--
 		<dependency>
 			<groupId>com.wavefront</groupId>
 			<artifactId>wavefront-spring-boot-starter</artifactId>
 		</dependency>
+	-->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -73,10 +75,12 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-config</artifactId>
 		</dependency>
+<!--		
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-sleuth</artifactId>
 		</dependency>
+	-->
 
 		<!-- Third parties -->
 		<dependency>
@@ -97,10 +101,12 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 		</dependency>
+<!--		
 		<dependency>
 			<groupId>io.zipkin.brave</groupId>
 			<artifactId>brave-instrumentation-mysql8</artifactId>
 		</dependency>
+	-->		
 
 		<!-- Testing -->
 		<dependency>
@@ -130,6 +136,7 @@
 				<scope>import</scope>
 			</dependency>
 
+<!--
 			<dependency>
 				<groupId>com.wavefront</groupId>
 				<artifactId>wavefront-spring-boot-bom</artifactId>
@@ -137,6 +144,7 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+-->
 
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
@@ -198,6 +206,11 @@
 		<profile>
 			<id>cloud</id>
 			<dependencies>
+				<dependency>
+					<groupId>com.datadoghq</groupId>
+					<artifactId>dd-java-agent</artifactId>
+					<version>0.70.0</version>
+				</dependency>
 				<!-- Spring Cloud Services -->
 				<dependency>
 					<groupId>io.pivotal.spring.cloud</groupId>
@@ -239,6 +252,12 @@
 	            <activeByDefault>true</activeByDefault>
 	        </activation>
 			<dependencies>
+				<!-- Datadog DD agent jar -->
+				<dependency>
+					<groupId>com.datadoghq</groupId>
+					<artifactId>dd-java-agent</artifactId>
+					<version>0.70.0</version>
+				</dependency>
 				<dependency>
 					<groupId>org.springframework.cloud</groupId>
 					<artifactId>spring-cloud-starter-kubernetes-config</artifactId>

@@ -32,18 +32,19 @@
 		<webjars-angular.version>1.6.4</webjars-angular.version>
 		<webjars-angular-ui-router.version>1.0.3</webjars-angular-ui-router.version>
 		<wro4j.version>1.8.0</wro4j.version>
-        <spring-boot.build-image.imageName>${REPOSITORY_PREFIX}/api-gateway</spring-boot.build-image.imageName>
+        <spring-boot.build-image.imageName>${REPOSITORY_PREFIX}/api-gateway${IMAGE_SUFFIX}</spring-boot.build-image.imageName>
 
 	</properties>
 
 	<dependencies>
 
 		<!-- Spring Boot -->
+<!--
 		<dependency>
 			<groupId>com.wavefront</groupId>
 			<artifactId>wavefront-spring-boot-starter</artifactId>
 		</dependency>
-
+	-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -81,10 +82,12 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-config</artifactId>
 		</dependency>
+<!--		
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-sleuth</artifactId>
 		</dependency>
+	-->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-gateway</artifactId>
@@ -163,6 +166,7 @@
 				<scope>import</scope>
 			</dependency>
 
+<!--
 			<dependency>
 				<groupId>com.wavefront</groupId>
 				<artifactId>wavefront-spring-boot-bom</artifactId>
@@ -170,6 +174,7 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+-->
 
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
@@ -335,11 +340,17 @@
 
 
 		<profile>
-			<id>kubernetes</id>
+			<id>k8s</id>
 	        <activation>
 	            <activeByDefault>true</activeByDefault>
 	        </activation>
 			<dependencies>
+				<!-- Datadog DD agent jar -->
+				<dependency>
+					<groupId>com.datadoghq</groupId>
+					<artifactId>dd-java-agent</artifactId>
+					<version>0.70.0</version>
+				</dependency>
 				<dependency>
 					<groupId>org.springframework.cloud</groupId>
 					<artifactId>spring-cloud-starter-kubernetes-all</artifactId>

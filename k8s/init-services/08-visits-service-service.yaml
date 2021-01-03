@@ -5,7 +5,7 @@ metadata:
   labels:
     app: visits-service
   name: visits-service
-  namespace: spring-petclinic  
+  namespace: spring-petclinic-dd  
 spec:
   ports:
   - name: "8080"

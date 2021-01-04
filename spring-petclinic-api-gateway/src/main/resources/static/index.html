@@ -12,6 +12,24 @@
     <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.png"/>
 
     <title>PetClinic :: a Spring Framework demonstration</title>
+    <script
+        src="https://www.datadoghq-browser-agent.com/datadog-rum.js"
+        type="text/javascript">
+    </script>
+    <script>
+        window.DD_RUM && window.DD_RUM.init({
+            applicationId: '15d59b3b-8b82-4d4b-91e9-6a03d3885938',
+            clientToken: 'pubb5284c8f853cc35332d2857ff2807746',
+            site: 'datadoghq.com',
+            service: 'petclinic',
+            env: 'sandbox',
+            version: '1.0.0',
+            sampleRate: 100,
+            trackInteractions: true,
+            allowedTracingOrigins: [/.*\/\/localhost.*/, /.*\.amazonaws\.com/, /.*\.azure\.com/]
+        });
+    </script>
+
     <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/petclinic.css"/>
 

@@ -46,8 +46,8 @@ spec:
           limits:
             memory: 1Gi
           requests:
-            cpu: 2000m
-            memory: 1Gi
+            cpu: 200m
+            memory: 128Mi
         env:
         - name: JAVA_OPTS
           value: "-javaagent:/workspace/BOOT-INF/lib/dd-java-agent-0.70.0.jar"
@@ -77,7 +77,7 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: kubernetes
         - name: SPRING_DATASOURCE_URL
-          value: jdbc:mysql://customers-db-mysql.spring-petclinic.svc.cluster.local:3306/service_instance_db
+          value: jdbc:mysql://customers-db-mysql.spring-petclinic-dd.svc.cluster.local:3306/service_instance_db
         - name: SPRING_DATASOURCE_USERNAME
           value: root
         - name: SPRING_DATASOURCE_PASSWORD
@@ -85,8 +85,6 @@ spec:
              secretKeyRef:
                name: customers-db-mysql
                key: mysql-root-password
-        - name: MANAGEMENT_METRICS_EXPORT_WAVEFRONT_URI
-          value: proxy://wavefront-proxy.spring-petclinic.svc.cluster.local:2878
         ports:
         - containerPort: 8080
       restartPolicy: Always

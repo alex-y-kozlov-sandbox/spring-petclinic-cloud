@@ -46,8 +46,8 @@ spec:
           limits:
             memory: 1Gi
           requests:
-            cpu: 500m
-            memory: 1Gi
+            cpu: 200m
+            memory: 128Mi
         env:
         - name: JAVA_OPTS
           value: "-javaagent:/workspace/BOOT-INF/lib/dd-java-agent-0.70.0.jar"
@@ -76,8 +76,6 @@ spec:
 
         - name: SPRING_PROFILES_ACTIVE
           value: kubernetes
-        - name: MANAGEMENT_METRICS_EXPORT_WAVEFRONT_URI
-          value: proxy://wavefront-proxy.spring-petclinic.svc.cluster.local:2878
         ports:
         - containerPort: 8080
       restartPolicy: Always
